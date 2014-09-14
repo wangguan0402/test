@@ -1,7 +1,7 @@
 # ￼Assignment 2: Authentication and Sessions
 ### Due Thursday, Oct 2, 2014, at 11:55 PM.
 
-For this PA, you will continue working on the photo album website developed in PA1. However, do not touch the files in the pa1 sub¬directory. Make another sub¬directory called pa2, and copy the files from pa1 into the pa2 sub¬directory and work on the files there. By the end of this programming assignment you will learn how to authenticate users and maintain sessions.
+For this PA, you will continue working on the photo album website developed in PA1. However, do not touch the files in the pa1 sub-directory. Make another sub-directory called pa2, and copy the files from pa1 into the pa2 sub-directory and work on the files there. By the end of this programming assignment you will learn how to authenticate users and maintain sessions.
 
 ## Part 1: Getting started
 
@@ -94,7 +94,7 @@ along with them.
 
 You should enforce a session inactivity time limit of 5 minutes. If a user tries to continue a session after 5 minutes or more of inactivity, then log out the user, destroy the session, and force the user to log in again.
 
-You may want to maintain two session variables: username and lastactivity. The username stores the user name of the authenticated user. The lastactivity stores the time of user’s last activity to check inactivity time out.
+You may want to maintain two session variables: `username` and `lastactivity`. The `username` stores the user name of the authenticated user. The `lastactivity` stores the time of user’s last activity to check inactivity time out.
 
 ##### Sessions in PHP:
 Created with the `session_start()` command. This
@@ -121,7 +121,7 @@ Contains welcoming message and information about the website. Also has an invita
 #### New User page:`/user` [public]
 
 Contains a form for users to fill in their username, firstname,
-lastname, e¬mail address and password.  Make sure the password field
+lastname, e-mail address and password.  Make sure the password field
 does not display text and that there are two password fields for
 verification.
 
@@ -151,8 +151,8 @@ logged in user by the owner.
 #### Edit Account page:`/user/edit` [sensitive]
 
 The user should be able to change his/her firstname, lastname,
-password and e¬mail address (but not username). Again, validate the input values
-both on the client  as well as server ¬side. Also keep a link on this
+password and e-mail address (but not username). Again, validate the input values
+both on the client-side as well as server-side. Also keep a link on this
 page to delete the user's account. This should remove all associated
 pictures , albums, as well as access to other users' albums (useful in case the username
 is recycled and allocated to a new user). 
@@ -184,10 +184,10 @@ This page displays an album just like the previous assignments. The
 album title should be at the top, along with the album's owner. The
 photos should be displayed in sequence order, each with its date, and
 a caption. The page is the same as in the previous assignment, except
-that if the album is private, only the logged ¬in user has permission
+that if the album is private, only the logged-in user has permission
 to view the album. This means the `/album` can be reached
-either from the logged ¬in user’s homepage or your main page for
-non ¬logged in users.
+either from the logged-in user’s homepage or your main page for
+non-logged in users.
 
 #### View picture page:`/pic` [sensitive/public]
 
@@ -235,22 +235,24 @@ You should enforce the following rules:
 
 You can assume that the user is acting in good faith: your goal is to
 prevent users from adding bad usernames/passwords, not to guard
-against motivated attackers who want to sneak a strange
-entry into your password database.
+against motivated attackers who want to sneak a [strange
+entry](http://en.wikipedia.org/wiki/Code_injection) into your password database. (which means you do not need
+to check things beyond above rules)
+
 
 
 ## Grading
 
 We will check the pa2 directory for your new secure photo album website. Based on PA1, your website should contain at least the following users with their albums.
 
-* Username: sportslover, Password: paulpass93 ¬ "I love football" (public), "I love sports" (public)
-* Username: traveler, Password: rebeccapass15 ¬ "Around The World"(public)
-* Username: spacejunkie, Password: bob1pass ¬ "Cool Space Shots" (private, also
+* Username: sportslover, Password: paulpass93 - "I love football" (public), "I love sports" (public)
+* Username: traveler, Password: rebeccapass15 - "Around The World"(public)
+* Username: spacejunkie, Password: bob1pass - "Cool Space Shots" (private, also
 accessible to traveler)
 
 Your website may contain other users and albums, but please ensure
 that the above users and albums exist. Do not touch the files in pa2
-sub¬directory after the deadline.
+sub-directory after the deadline.
 
 As mentioned before, **Remember to commit your code into GitHub and the server, 
 please do not modify your code after the due date - either on the repo or the 
@@ -261,12 +263,12 @@ late days or take off points.
 
 Each correctly implemented extra credit will increase your score by 2%, to a maximum of 6%. The main reason for the extra credit is to provide opportunities for you to challenge yourself. Please take on the extra credit after you have completed the rest of the assignment. Make sure to mention which extra credit features you implemented in your README.md.
 
-* When form is submitted in the New User page, send an e¬mail message to 
+* When form is submitted in the New User page, send an e-mail message to 
 the new user confirming his/her membership and redirect them to the logged in 
 home page. (HINT: Check out Mandrill - Ask Otto for help.)
 * Ask the user if he/she has forgotten the password and if so, create a 
-new password and e¬mail it to them.
-* An additional class of "root¬user". Anyone who is a root¬user can edit anyone's album.
+new password and e-mail it to them.
+* An additional class of "root-user". Anyone who is a root-user can edit anyone's album.
 There should be an administrative interface for giving/removing the root-user privilege.
 * Use CSS to align images in rows and columns (no HTML tables allowed!) and make 
 the website look more appealing - GSI/IAs will award points based on effort and overall design.

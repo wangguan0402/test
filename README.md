@@ -1,7 +1,7 @@
 # ￼Assignment 2: Authentication and Sessions
 ### Due Thursday, Oct 2, 2014, at 11:55 PM.
 
-For this PA, you will continue working on the photo album website developed in PA1. However, do not touch the files in the pa1 sub­directory. Make another sub­directory called pa2, and copy the files from pa1 into the pa2 sub­directory and work on the files there. By the end of this programming assignment you will learn how to authenticate users and maintain sessions.
+For this PA, you will continue working on the photo album website developed in PA1. However, do not touch the files in the pa1 sub¬directory. Make another sub¬directory called pa2, and copy the files from pa1 into the pa2 sub¬directory and work on the files there. By the end of this programming assignment you will learn how to authenticate users and maintain sessions.
 
 ## Part 1: Getting started
 
@@ -37,10 +37,10 @@ user has permission to see the page, and if so, let them see the page.
 * If the page is sensitive and the session has expired, say so and give the user a link to the Login page.￼￼￼￼
 * If the page is sensitive and there is no session, then state that one must authenticate to view this page and give a link to the Login page.
 
-In some of the cases above, the user is redirected to the Login page. This Login page needs to remember what the requested sensitive page was using a query peramater. For example: `/login?url=/the/prev/url` After the user types her name and password she should be returned right back to the sensitive page she previously tried to access via a redirect again. Note, some of the pages can be sensitive some of the time and public the rest of the time. For example, the View Album page is only sensitive if the album is private.
+In some of the cases above, the user is redirected to the Login page. This Login page needs to remember what the requested sensitive page was using a query parameter. For example: `/login?url=/the/prev/url` After the user types her name and password she should be returned right back to the sensitive page she previously tried to access via a redirect again. Note, some of the pages can be sensitive some of the time and public the rest of the time. For example, the View Album page is only sensitive if the album is private.
 
 **Your code should observe the following rules about access privileges:**
-* Public albums are  _accessible_ to both logged in users and unauthenticated visitors.
+* Public albums are _accessible_ to both logged in users and unauthenticated visitors.
 * Private albums are _accessible_ only to those users that have explicit access to that
 album. Users will have access to user's private album if
 and only if there exists a tuple (a, u) in the *AlbumAccess* relation
@@ -88,7 +88,7 @@ allows your server side code to figure out which set of session
 variables are relevant to the current client. Thus, the only value the
 client really has to provide is the session ID, though your
 application can explicitly transmit other cookie values if you 
-like. Server side scripting languages have  built-in support for
+like. Server side scripting languages have built-in support for
 managing session IDs and the server side session variables that go
 along with them.
 
@@ -121,7 +121,7 @@ Contains welcoming message and information about the website. Also has an invita
 #### New User page:`/user` [public]
 
 Contains a form for users to fill in their username, firstname,
-lastname, e­mail address and password.  Make sure the password field
+lastname, e¬mail address and password.  Make sure the password field
 does not display text and that there are two password fields for
 verification.
 
@@ -151,8 +151,8 @@ logged in user by the owner.
 #### Edit Account page:`/user/edit` [sensitive]
 
 The user should be able to change his/her firstname, lastname,
-password and e­mail address (but not username). Again, validate the input values
-both on the client  as well as server ­side. Also keep a link on this
+password and e¬mail address (but not username). Again, validate the input values
+both on the client  as well as server ¬side. Also keep a link on this
 page to delete the user's account. This should remove all associated
 pictures , albums, as well as access to other users' albums (useful in case the username
 is recycled and allocated to a new user). 
@@ -184,15 +184,15 @@ This page displays an album just like the previous assignments. The
 album title should be at the top, along with the album's owner. The
 photos should be displayed in sequence order, each with its date, and
 a caption. The page is the same as in the previous assignment, except
-that if the album is private, only the logged ­in user has permission
+that if the album is private, only the logged ¬in user has permission
 to view the album. This means the `/album` can be reached
-either from the logged ­in user’s homepage or your main page for
-non ­logged in users.
+either from the logged ¬in user’s homepage or your main page for
+non ¬logged in users.
 
 #### View picture page:`/pic` [sensitive/public]
 
 This page displays a picture just like the previous assignment. It should 
-have the caption, full­sized picture and links to previous and next picture.
+have the caption, full-sized picture and links to previous and next picture.
 If the user does not have access to the album this picture is in, they should
 not be able to see the picture.
 
@@ -217,7 +217,7 @@ The new HTML5 specification standardizes many features that are
 previously common across the web, but were previously implemented in a
 piecemeal and/or quirky fashion.  One such example is client-side
 validation of forms.  Previously implemented using JavaScript, you can
-now implement client-side form validation with HTML5's builtin
+now implement client-side form validation with HTML5's built-in
 support.  (See
 http://www.html5rocks.com/en/tutorials/forms/html5forms/#toc-validation)
 
@@ -243,14 +243,14 @@ entry into your password database.
 
 We will check the pa2 directory for your new secure photo album website. Based on PA1, your website should contain at least the following users with their albums.
 
-* Username: sportslover, Password: paulpass93 ­ "I love football" (public), "I love sports" (public)
-* Username: traveler, Password: rebeccapass15 ­ "Around The World"(public)
-* Username: spacejunkie, Password: bob1pass ­ "Cool Space Shots" (private, also
+* Username: sportslover, Password: paulpass93 ¬ "I love football" (public), "I love sports" (public)
+* Username: traveler, Password: rebeccapass15 ¬ "Around The World"(public)
+* Username: spacejunkie, Password: bob1pass ¬ "Cool Space Shots" (private, also
 accessible to traveler)
 
 Your website may contain other users and albums, but please ensure
 that the above users and albums exist. Do not touch the files in pa2
-sub­directory after the deadline.
+sub¬directory after the deadline.
 
 As mentioned before, **Remember to commit your code into GitHub and the server, 
 please do not modify your code after the due date - either on the repo or the 
@@ -261,12 +261,13 @@ late days or take off points.
 
 Each correctly implemented extra credit will increase your score by 2%, to a maximum of 6%. The main reason for the extra credit is to provide opportunities for you to challenge yourself. Please take on the extra credit after you have completed the rest of the assignment. Make sure to mention which extra credit features you implemented in your README.md.
 
-* When form is submitted in the New User page, send an e­mail message to 
-the new user confirming his/her membership and redirect them to the logged­in 
+* When form is submitted in the New User page, send an e¬mail message to 
+the new user confirming his/her membership and redirect them to the logged in 
 home page. (HINT: Check out Mandrill - Ask Otto for help.)
 * Ask the user if he/she has forgotten the password and if so, create a 
-new password and e­mail it to them.
-* An additional class of "root­user". Anyone who is a root­user can edit anyone's album.
-There should be an administrative interface for giving/removing the root­user privilege.
+new password and e¬mail it to them.
+* An additional class of "root¬user". Anyone who is a root¬user can edit anyone's album.
+There should be an administrative interface for giving/removing the root-user privilege.
 * Use CSS to align images in rows and columns (no HTML tables allowed!) and make 
 the website look more appealing - GSI/IAs will award points based on effort and overall design.
+

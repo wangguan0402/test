@@ -265,7 +265,7 @@ Each correctly implemented extra credit will increase your score by 2%, to a max
 
 * When form is submitted in the New User page, send an e-mail message to 
 the new user confirming his/her membership and redirect them to the logged in 
-home page. (HINT: Check out Mandrill - Ask Otto for help.)
+home page. (HINT: Check out Mandrill - Ask Guan for help.)
 * Ask the user if he/she has forgotten the password and if so, create a 
 new password and e-mail it to them.
 * An additional class of "root-user". Anyone who is a root-user can edit anyone's album.

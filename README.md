@@ -81,7 +81,7 @@ In `/album/edit`, the user should be able to edit the `access` permission for th
 
 ### Session Management
 
-Session variables are stored at the server. Clients that are
+*Session variables are stored at the server*. Clients that are
 part of a live session present a session ID to the server with each
 request, either via cookies or via a URL parameter. That session ID
 allows your server side code to figure out which set of session

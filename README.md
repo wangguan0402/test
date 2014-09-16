@@ -68,6 +68,8 @@ In `/album/edit`, the user should be able to edit the `access` permission for th
 *Album* table. The user should also be able to give/remove user's access by editing the AlbumAccess table. Thus an album could be public, private or private with someone accessible. The interface for
 `/albums/edit` should appear roughly as below:
 
+
+
 <table>
 <tr><td>Album</td><td>Access</td><td></td><td></td></tr>
 <tr><td>Summer 2011 in Iceland</td><td>Public</td><td>[Edit]</td><td>[Delete]</td></tr>

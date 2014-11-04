@@ -1,5 +1,5 @@
 # Assignment 5: PageRank and HITS
-### Due Wed, Nov 20, 2014, at 11:59 PM
+### Due Thur, Nov 20, 2014, at 11:59 PM
 
 In this assignment you will compute PageRank and HITS values for a portion of the Web graph. This assignment will be standalone: it will not build on your previous work and you do not need to integrate it with your previous inverted index work (at least, not yet). You should focus exclusively on generating an accurate set of PageRank and HITS (hub and authority) scores for the hyperlink graph that you are given.
 

@@ -119,8 +119,8 @@ We could also use this command line:
 It will use a different d value, will use a percent-change convergence criterion, 
 and will operate on the large dataset.
 
-Run your PageRank code on large data set provided with d = 0.85, and save the file in pg5largeoutput.txt. 
-Please iterate at least ten times to generate the results. 
+Run your PageRank code on large data set provided with d = 0.85, and save the file in pa5_SecretString/pagerank/pg5largeoutput.txt. 
+Please iterate ten times to generate the results. 
 
 The command will be: `eecs485pa5p 0.85 -k 10 large.net pg5largeoutput.txt`. 
 

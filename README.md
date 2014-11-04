@@ -188,7 +188,7 @@ no more than `X`. The values X and K should be command-line arguments of your to
 
 * The running time of computing hub and authority scores should be about 10 minutes. If your program is taking much longer than this, you likely need to optimize your code.
 
-* Please check [Here](https://github.com/EECS485/admin/blob/master/pa5/HITS.md) for more details.
+* Please check [Here](https://github.com/wangguan0402/test2/blob/master/README.md) for more details.
 
 ### Result Output
 

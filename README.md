@@ -1,277 +1,245 @@
-# ￼Assignment 2: Authentication and Sessions
-### Due Thursday, Oct 2, 2014, at 11:55 PM.
+# Assignment 5: PageRank and HITS
+### Due Wed, Nov 20, 2014, at 11:59 PM
+
+In this assignment you will compute PageRank and HITS values for a portion of the Web graph. This assignment will be standalone: it will not build on your previous work and you do not need to integrate it with your previous inverted index work (at least, not yet). You should focus exclusively on generating an accurate set of PageRank and HITS (hub and authority) scores for the hyperlink graph that you are given.
+
+**Note:** For this assignment, we highly recommend you to use your own laptop or CAEN’s computer to do the computation. 
+You don't need Apache for this project, and the heavy computational load of this PA will place a 
+strain on the eecs485 machines.
+
+![Figure 1. A part of graph we will use](http://www-personal.umich.edu/~chjun/eecs485/PA.png)
+
+## PageRank
+
+### The Graph
+
+We will provide you with two datasets for this assignment (You can find the links at the end of this manual). 
+They are both derived from the hypertext graph described by Wikipedia pages, in which each page 
+(e.g., the Barack Obama Wikipedia page) is a node and an intra-Wikipedia link is a directed edge in that graph. 
+We have removed all of the links that connect the Wikipedia pages to outside non-Wikipedia sites.
 
-For this PA, you will continue working on the photo album website developed in PA1. However, do not touch the files in the pa1 sub-directory. Make another sub-directory called pa2, and copy the files from pa1 into the pa2 sub-directory and work on the files there. By the end of this programming assignment you will learn how to authenticate users and maintain sessions.
+There’s nothing special about using Wikipedia; PageRank works on any kind of hypertext network 
+and is designed to work on the overall Web. However, Wikipedia is nice to use: the pages are 
+easy to understand, the links are not spammy, the graph is interesting, and so on.
 
-## Part 1: Getting started
+The first dataset, small, contains 362 nodes and all of the directed edges between them. 
+It is small enough that you can trace connections by hand when debugging your code.
 
-These sites contain useful tutorial and reference information for what you'll be implementing in this PA.
+The second dataset, large, contains about 8M nodes and all of the appropriate directed edges. 
+It will be harder for you to debug your code on large than on small. We strongly recommend that 
+you get PageRank working on small first.
 
-* [HTTP Cookies](http://en.wikipedia.org/wiki/HTTP_cookie)
-* Sessions: [Python](http://flask.pocoo.org/docs/quickstart/#sessions) or [PHP](http://www.php.net/manual/en/ref.session.php)
-* Authentication: [Python](http://flask.pocoo.org/snippets/8/) or [PHP](http://php.net/manual/en/features.http-auth.php)
+### The Code
+You should implement this project in a traditional language: C, C++, or Java. Do not use PHP/Python.
 
-## Part 2: Build the website
-This PA is about personalization. The first step to doing any kind of
-personalization is to keep track of who is browsing your site. In
-class we discussed how HTTP is a stateless protocol, which cannot
-itself retain data from one request to the next.  The way to maintain
-state from one page request to another is using *sessions*. In this PA
-we will add a login page to the site. Users will only need to type
-their username and password once. Thereafter the system will use
-session variables to determine who the logged in user is.
+You will receive two datafiles: small.net and large.net. 
+The dataset is in the 'Pajek NET' format. The dataset is appropriate to 
+represent the graph structure for our purpose. A simple example of the format from mapequation.org is as follows:
 
-Pages that are *sensitive* require users to login before they can view those pages. The rest of the pages will remain public and will not require a username or password to be viewed. Whenever a user tries to enter a sensitive page you should make sure that he/she has the privileges to view it. This is done by checking if the user has a valid session, and if so, whether the user is authorized to view the page.
+    *Vertices 6
+    1 "Node 1" 1.0
+    2 "Node 2" 1.0 
+    3 "Node 3" 1.0 
+    4 "Node 4" 1.0 
+    5 "Node 5" 1.0 
+    6 "Node 6" 1.0
+    *Arcs 8
+    1 2 2.0
+    2 3 2.0
+    3 1 2.0
+    1 4 1.0
+    4 5 2.0
+    5 6 2.0
+    6 4 2.0
+    4 1 1.0
 
-Some pages do not require user authentication or sessions (e.g., a
-default home page or a create account page). Some other pages only
-require that the user be authenticated and are not dependent on who
-the user is (e.g., a logged in home page). Others may provide access
-depending on who the user is and whether he/she is permitted to access
-that page (e.g., someone's private album).
+The two lines beginning with `*` tells us the number of nodes and the number of directed edges in the graph, respectively. From the 2nd line to the 7th line, each line is a pair of node id, node label, and node weight. From the 9th line to the end, each line corresponds to a directed edge with source node id, target node id, and edge weight. In both node lines and edge lines, the weights are optional, and in our dataset, the weights are not included.
 
-In short, when a user requests a URL, you should:
-* Check if the page is public. If so, view the page.
-* Check if the page is sensitive and the user has a valid session. If so, check if the
-user has permission to see the page, and if so, let them see the page.
-* If the page is sensitive and the session has expired, say so and give the user a link to the Login page.￼￼￼￼
-* If the page is sensitive and there is no session, then state that one must authenticate to view this page and give a link to the Login page.
+The first few lines of our small.net file are as follows:
 
-In some of the cases above, the user is redirected to the Login page. This Login page needs to remember what the requested sensitive page was using a query parameter. For example: `/login?url=/the/prev/url` After the user types her name and password she should be returned right back to the sensitive page she previously tried to access via a redirect again. Note, some of the pages can be sensitive some of the time and public the rest of the time. For example, the View Album page is only sensitive if the album is private.
+    *Vertices 362
+    534366 "Barack_Obama"
+    307 "Abraham_Lincoln"
+    569 "Anthropology"
+    863 "American_Civil_War"
 
-**Your code should observe the following rules about access privileges:**
-* Public albums are _accessible_ to both logged in users and unauthenticated visitors.
-* Private albums are _accessible_ only to those users that have explicit access to that
-album. Users will have access to user's private album if
-and only if there exists a tuple (a, u) in the *AlbumAccess* relation
-(see below).
-* A picture that does not belong to any public albums is accessible to a user if and only if it belongs to at least one private album that _u_ has permission to access to.
+You really only need the edge connectivity information in order to compute PageRank; 
+the node labels aren't used by the algorithm. However, you will probably want to make sure 
+that the resulting PageRank weights make sense, giving large weights to important topics and small 
+weights to unimportant ones.  Using the node id to node label mapping will help you test and debug your results.
+
+### PageRank Details
 
-### Add public/private feature to the albums
+We went over the PageRank details in class. Be sure to keep in mind a few details:
+Every node must have incoming links. However, you do not need to do this explicitly, 
+as long as d < 1.0. The (1-d) term that describes the “teleport” quantity 
+will implicitly add outgoing links from every node to every other node. 
+The d term should be a command-line argument of your tool that we can change.
+Every node must also have at least one outgoing link. In the event that a node has 
+no outgoing links, create “virtual” outgoing links to every other node in the graph. 
+For such nodes you will basically distribute all of its outgoing PageRank in the "teleport" mechanism. 
+Make sure to remove all self edges before processing data.
 
-#### Update Album Table
+You should implement two different stopping criteria: stop after K iterations, 
+and stop after every node changes no more than X. The values X and K should be command-line arguments of 
+your tool that we can change.
 
-You need to add `access` attribute to this table, so the new scheme for Album will be
-* Album ( *albumid*, title, created, lastupdated, username, access )
+### Result Output
+Your program should write the answer to the output file as a pair of id, pagerank pairs. 
+Each line in the output file should start with the integer id of a page, 
+then a comma, then the pagerank value you have computed for that page. For example:
 
-`access` specifies whether access to the album should be limited to a
-set of users indicated in the *AlbumAccess* table (described below).
-It only takes values of "public" or "private." 
+    1,0.18
+    2,0.005
+    .....
+    and so on.
 
-#### Create new Table AlbumAccess
+Your source code should be compiled by invoking make in the pa5/pagerank directory 
+(you can use Makefile to make this job easier). After the compile is finished, 
+your program should be invoked by a command-line tool called eecs485pa5p. 
+If you are writing in C or C++, this tool can simply be your binary. 
+If you are writing in Java, this tool should be a bash script that invokes the Java virtual machine.
 
-* AlbumAccess ( *albumid*, *username* )
+The command-line tool should take the following set of arguments:
 
-This relation indicates the users who have access to each specific album.
+   `eecs485pa5p <dvalue> (-k <numiterations> | -converge <maxchange>) inputnetfile outputfile`
 
-In `/album/edit`, the user should be able to edit the `access` permission for the
-*Album* table. The user should also be able to give/remove user's access by editing the AlbumAccess table. Thus an album could be public, private or private with someone accessible. The interface for
-`/albums/edit` should appear roughly as below:
+For example:
 
+   `eecs485pa5p 0.85 -k 10 small.net pagerankSmallOut`
 
+It should yield a PageRank computation 
+over the small graph. It will use a d value of 0.85 and will stop after 10 iterations. 
+It will write the results to a file called pagerankSmallOut.
 
-<table>
-<tr><td>Album</td><td>Access</td><td></td><td></td></tr>
-<tr><td>Summer 2011 in Iceland</td><td>Public</td><td>[Edit]</td><td>[Delete]</td></tr>
-<tr><td>Spring break 2010 in Brooklyn</td><td>Public</td><td>[Edit]</td><td>[Delete]</td></tr>
-<tr><td>Thanksgiving 2010</td><td>Public</td><td>[Edit]</td><td>[Delete]</td></tr>
-<tr><td>New: ______________</td><td>________</td><td>[Add]</td><td></td></tr>
-</table>
+We could also use this command line:
 
+   `eecs485pa5p 0.7 -converge 0.01 large.net pagerankLargeOut`
 
-*****
+It will use a different d value, will use a percent-change convergence criterion, 
+and will operate on the large dataset.
 
-### Session Management
+Run your PageRank code on large data set provided with d = 0.85, and save the file in pg5largeoutput.txt. 
+Please iterate at least ten times to generate the results. 
 
-**Session variables are stored at the server**. Clients that are
-part of a live session present a session ID to the server with each
-request, either via cookies or via a URL parameter. That session ID
-allows your server side code to figure out which set of session
-variables are relevant to the current client. Thus, the only value the
-client really has to provide is the session ID, though your
-application can explicitly transmit other cookie values if you 
-like. Server side scripting languages have built-in support for
-managing session IDs and the server side session variables that go
-along with them.
+The command will be: `eecs485pa5p 0.85 -k 10 large.net pg5largeoutput.txt`. 
 
-You should enforce a session inactivity time limit of 5 minutes. If a user tries to continue a session after 5 minutes or more of inactivity, then log out the user, destroy the session, and force the user to log in again.
+**Note that** on the large graph, computing PageRank can take a long time. However, 
+the running time for the large graph should be definitely under 2 hours. 
+If you are taking much longer than this (perhaps each iteration takes more than 12 minutes), 
+your code may need more attention.
 
-You may want to maintain two session variables: `username` and `lastactivity`. The `username` stores the user name of the authenticated user. The `lastactivity` stores the time of user’s last activity to check inactivity time out.
+## HITS
 
-##### Sessions in PHP:
-Created with the `session_start()` command. This
-will test to see if there’s a current session. If not, it will create
-one. If so, it will use the session ID to bind the `$_SESSION`
-variable. This array is rebound to a different value, depending on the
-session ID presented by the client. Sessions are destroyed with
-`session_destroy();`
+###  Graph
 
-##### Sessions in Python:
-In Flask sessions are started automatically. The session variables can be accessed as such: `session['username']`.
-In order for sessions to work properly however a secret key must be set. Please refer to the Flask docs for more infomation about how to use sessions. Be sure that sessions are imported when attempting to use them. Sessions work similarly in other Python frameworks.
-
+  The graph data provided for HITS is in the same 
+  format as in PageRank (You can find the link at the end of this manual). 
+  We again use the 'Pajek NET' format to represent the graph. 
+  However, since HITS constructs a seed set from the input query, 
+  we additionally need text data to help choose the nodes. We pre-processed the wiki text data and 
+  create an inverted index for you to load and use: no need to compute it yourself. You will use this 
+  data to run HITS algorithm.
 
-### Implement Sessions and Authentication: 
-
-What follows is a list of the files that you should create in your
-application. You should have created some of these for PA1.
+### The Code
 
-#### Default home page:`/` [public]
+As with PageRank, you should implement this project only in a traditional language: C, C++, or Java.
 
-Contains welcoming message and information about the website. Also has an invitation for new users to join as members. There should be a link to a New User page. There should be some way of getting from this home page to all the public albums of all users.
-
-#### New User page:`/user` [public]
-
-Contains a form for users to fill in their username, firstname,
-lastname, e-mail address and password.  Make sure the password field
-does not display text and that there are two password fields for
-verification.
+The inverted index data is in the format like:
 
-There are validation rules set forth in Part 4 below that describe the
-set of permissible passwords.  You should use client-side HTML5 validation
-checking to ensure that the password is "good enough."  You should
-*not* use JavaScript to perform this testing.
-
-You should also check that the two password fields match.  You should
-perform this test at both the client- and server-side.  For this test *only*
-you can use a small JavaScript function.
-
-If a session already exists redirect the user to `/user/edit`.
-
-#### Logged in home page:`/` [sensitive]
-
-This page is the home page for a user who has already logged in. Make
-sure for all pages in a logged in state, you clearly display the
-message "Logged in as <Firstname> <Lastname>". This page and all
-subsequent logged-in pages should have a navigational interface with
-links to Home (this page), Edit Account, My Albums and Logout. The
-main body of the page should have a list of all the accessible albums
-categorized by their owners. Accessible albums include public albums
-as well as private albums which have been authorized for the current
-logged in user by the owner. 
+    Acadians 5042916 
+    Acadie 21184
+    Acadien 21184
+    Acadien 731832
+    Acadiensis 21184
+    AcadSA 17416221
+    acad_pol 25417
+    Acahualinca 21362
+    Acajutla 9356
+    acalorado 1889736 
+    acamado 1523829 
+    ...
 
-#### Edit Account page:`/user/edit` [sensitive]
+Each line is a “tuple” where the first column is a word, and the
+second column is the page id which contains the word. The same word
+can appear many times in the file. Your query should be handled in
+a case-insensitive manner, so that bear in mind when reading the
+inverted index file. 
 
-The user should be able to change his/her firstname, lastname,
-password and e-mail address (but not username). Again, validate the input values
-both on the client-side as well as server-side. Also keep a link on this
-page to delete the user's account. This should remove all associated
-pictures , albums, as well as access to other users' albums (useful in case the username
-is recycled and allocated to a new user). 
+Your code should read both files and use them to compute hub and authority values.
 
-You can perform the delete however you like. However creating a `/user/delete` endpoint which 
-accepts only POST requests may be the easiest, then you can redirect the user back to the 
-public homepage.
+### HITS Details
 
-#### My Albums page:`/albums/edit` [sensitive]
+Follow the general algorithm for HITS covered in the class. A few things to keep in mind are as follows:
 
-This is your `/albums/edit` page from PA1. It allows the user to
-add new albums, view existing albums, delete them or edit them.
-Remember that deleting an album should also involve deleting
-pictures in the album.
+* Select the seed set by Boolean retrieval. Find top-h results from the given query ( documentIDs of results in increasing order). 
+The set of query terms is given as a command line argument inside double quotes. 
+To find the relevant results, use Boolean retrieval (you don't need to use TF-IDF scoring for this project). 
+This set of result pages will become the seed set. 
 
-#### Edit Album page:`/album/edit` [sensitive]
-￼￼￼
-At the top of this page the user should be able to change the album
-name and permissions. There should be some way the user can edit a
-list of other users to whom he/she would like to give explicit access
-to view this album, if it is private. You should also list the 
-pictures in the album. Users should be able to delete pictures from the 
-album as well as add new pictures. Users should also be able to click 
-on individual images and be directed to `/pic` from your PA1.
+* You should handle multiple-word queries as a conjunction. There is no need to handle them as phrase queries. When you try to load the whole index into memory, you may need to configure the memory limit for your program. 
 
-#### View Album page:`/album` [sensitive/public]
+* Grow the seed set into base set by including pages that are pointed to, or that point to, a page in the seed set. 
+Now calculate hub and authority values iteratively. After every iteration of the algorithm, 
+renormalize all values so that they sum to 1.
 
-This page displays an album just like the previous assignments. The
-album title should be at the top, along with the album's owner. The
-photos should be displayed in sequence order, each with its date, and
-a caption. The page is the same as in the previous assignment, except
-that if the album is private, only the logged-in user has permission
-to view the album. This means the `/album` can be reached
-either from the logged-in user’s homepage or your main page for
-non-logged in users.
+* You should implement two different stopping criteria: stop after K iterations, and stop after every node changes 
+no more than `X`. The values X and K should be command-line arguments of your tool that we can change.
 
-#### View picture page:`/pic` [sensitive/public]
+* The running time of computing hub and authority scores should be about 10 minutes. If your program is taking much longer than this, you likely need to optimize your code.
 
-This page displays a picture just like the previous assignment. It should 
-have the caption, full-sized picture and links to previous and next picture.
-If the user does not have access to the album this picture is in, they should
-not be able to see the picture.
+* Please check [Here](https://github.com/EECS485/admin/blob/master/pa5/HITS.md) for more details.
 
-#### Logout page:`/logout` [sensitive]
+### Result Output
 
-This should destroy the session and redirect to the default home page.
+Your program should emit the answer as a pair of id, hub, authority pairs.  
+Each line in the output file should start with the integer id of a page, 
+followed by hub and authority values you have computed for that page (delimited by comma).  For example:
 
-## Part 3: Authentication
+    1,0.18,0.02
+    2,0.005,0.001
+    ....
 
-Perhaps obviously, authentication issues are present throughout this assignment. 
-In order to view a sensitive page, the user must be authenticated. You should use 
-a form with a username/password that is shipped to a server-side script that 
-tests the information against the database.
-Logging in should yield one of three situations, each of which should be handled differently.
+Your source code should be compiled by invoking make in the pa5/hits directory 
+(you can use Makefile to make this job easier). After the compile is finished, your program 
+should be invoked by a command-line tool called eecs485pa5h. If you are writing in C or C++, 
+this tool can simply be your binary. If you are writing in Java, this tool should be 
+a bash script that invokes the Java virtual machine.
 
-* Username OR password are invalid: Complain that the user-password combination is invalid.
-* Username-password combo is valid: Take the user to the logged in home page.
+The command-line tool should take the following set of arguments:
 
-## Part 4: Validation
+   `eecs485pa5h <h value> (-k <numiterations> | -converge <maxchange>) “queries” <input-net-file> <input-inverted-index-file> <output-file>`
 
-The new HTML5 specification standardizes many features that are
-previously common across the web, but were previously implemented in a
-piecemeal and/or quirky fashion.  One such example is client-side
-validation of forms.  Previously implemented using JavaScript, you can
-now implement client-side form validation with HTML5's built-in
-support.  (See
-http://www.html5rocks.com/en/tutorials/forms/html5forms/#toc-validation)
+For example:
 
-Again: you should *not* use JavaScript for form validation, except to test
-that multiple fields contain the same value.
+   `eecs485pa5h 100 -k 10 “iPhone Microsoft” hits.net hits.inv hitsOutput`
 
-You should enforce the following rules:
+It should yield a HITS computation over the hits.net graph and corresponding inverted index in hits.inv. It will use a h value of 100 and will stop after 10 iterations (h value was the value to obtain most relevant top-h results). It will write the results to a file called hitsOutput.
 
-* The username must be unique (this can only be enforced server-side)
-* The username must be at least three characters long
-* The username can only have letters, digits and underscores
-* The password should be at least 5 and at most 15 characters long
-* The password must contain at least one digit and at least one letter
-* The password can only have letters, digits and underscores
+We could also use this command line:
 
-You can assume that the user is acting in good faith: your goal is to
-prevent users from adding bad usernames/passwords, not to guard
-against motivated attackers who want to sneak a [strange
-entry](http://en.wikipedia.org/wiki/Code_injection) into your password database. (which means you do not need
-to check things beyond above rules)
+  `eecs485pa5h 50 -converge 0.01 “iPhone Microsoft” hits.net hits.inv hitsOutput`
 
-
+It will use a different h value, will use a percent-change convergence criterion.
 
 ## Grading
 
-We will check the pa2 directory for your new secure photo album website. Based on PA1, your website should contain at least the following users with their albums.
+We will check your pa5_SecretString/pagerank and pa5_SecretString/hits directory for your command-line tool. 
+We will run it on graphs that may be different from the Wikipedia test graphs, 
+and with different parameter settings. Make sure to keep the code compileable and executable 
+without any problems. We may deduct some amount from your grade if you do not follow the above format guidelines.
 
-* Username: sportslover, Password: paulpass93 - "I love football" (public), "I love sports" (public)
-* Username: traveler, Password: rebeccapass15 - "Around The World"(public)
-* Username: spacejunkie, Password: bob1pass - "Cool Space Shots" (private, also
-accessible to traveler)
+You cannot claim your score if we cannot even compile the code by typing make.
 
-Your website may contain other users and albums, but please ensure
-that the above users and albums exist. Do not touch the files in pa2
-sub-directory after the deadline.
+There is no extra credit available for this assignment.
 
-As mentioned before, **Remember to commit your code into GitHub and the server, 
-please do not modify your code after the due date - either on the repo or the 
-server**, or else we will assume your submission is late. We then can assess 
-late days or take off points.
+### Dataset
+#### PageRank
+* [Small wiki graph (61K uncompressed) ](http://www-personal.umich.edu/~chjun/eecs485/small.net)
+* [Large wiki graph (499M compressed)]( http://www-personal.umich.edu/~chjun/eecs485/large.net.tar.gz)
 
-## Extra Credit
+#### HITS
 
-Each correctly implemented extra credit will increase your score by 2%, to a maximum of 6%. The main reason for the extra credit is to provide opportunities for you to challenge yourself. Please take on the extra credit after you have completed the rest of the assignment. Make sure to mention which extra credit features you implemented in your README.md.
-
-* When form is submitted in the New User page, send an e-mail message to 
-the new user confirming his/her membership and redirect them to the logged in 
-home page. (HINT: Check out Mandrill - Ask Guan for help.)
-* Ask the user if he/she has forgotten the password and if so, create a 
-new password and e-mail it to them.
-* An additional class of "root-user". Anyone who is a root-user can edit anyone's album.
-There should be an administrative interface for giving/removing the root-user privilege.
-* Use CSS to align images in rows and columns (no HTML tables allowed!) and make 
-the website look more appealing - GSI/IAs will award points based on effort and overall design.
+* [Medium wiki graph (3M uncompressed)](http://www-personal.umich.edu/~chjun/eecs485/hits.net)
+* [Inverted Index for the graph (15M compressed) ](http://www-personal.umich.edu/~chjun/eecs485/hits_invindex.tar.gz)
 

@@ -7,7 +7,7 @@ In this assignment you will compute PageRank and HITS values for a portion of th
 You don't need Apache for this project, and the heavy computational load of this PA will place a 
 strain on the eecs485 machines.
 
-![Figure 1. A part of graph we will use](http://www-personal.umich.edu/~chjun/eecs485/PA.png)
+![Figure 1. A part of graph we will use](http://www-personal.umich.edu/~wangguan/eecs485/PA.png)
 
 ## PageRank
 
@@ -235,11 +235,11 @@ There is no extra credit available for this assignment.
 
 ### Dataset
 #### PageRank
-* [Small wiki graph (61K uncompressed) ](http://www-personal.umich.edu/~chjun/eecs485/small.net)
-* [Large wiki graph (499M compressed)]( http://www-personal.umich.edu/~chjun/eecs485/large.net.tar.gz)
+* [Small wiki graph (61K uncompressed) ](http://www-personal.umich.edu/~wangguan/eecs485/small.net)
+* [Large wiki graph (499M compressed)]( http://www-personal.umich.edu/~wangguan/eecs485/large.net.tar.gz)
 
 #### HITS
 
-* [Medium wiki graph (3M uncompressed)](http://www-personal.umich.edu/~chjun/eecs485/hits.net)
-* [Inverted Index for the graph (15M compressed) ](http://www-personal.umich.edu/~chjun/eecs485/hits_invindex.tar.gz)
+* [Medium wiki graph (3M uncompressed)](http://www-personal.umich.edu/~wangguan/eecs485/hits.net)
+* [Inverted Index for the graph (15M compressed) ](http://www-personal.umich.edu/~wangguan/eecs485/hits_invindex.tar.gz)
 

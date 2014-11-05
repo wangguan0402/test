@@ -30,7 +30,7 @@ It will be harder for you to debug your code on large than on small. We strongly
 you get PageRank working on small first.
 
 ### The Code
-You should implement this project in a traditional language: C, C++, or Java. Do not use PHP/Python.
+You could implement this project in: C, C++, Java or Python.
 
 You will receive two datafiles: small.net and large.net. 
 The dataset is in the 'Pajek NET' format. The dataset is appropriate to 
@@ -93,12 +93,14 @@ then a comma, then the pagerank value you have computed for that page. For examp
     2,0.005
     .....
     and so on.
-
+If you are writing in C, C++, or Java:
 Your source code should be compiled by invoking make in the pa5/pagerank directory 
 (you can use Makefile to make this job easier). After the compile is finished, 
 your program should be invoked by a command-line tool called eecs485pa5p. 
 If you are writing in C or C++, this tool can simply be your binary. 
 If you are writing in Java, this tool should be a bash script that invokes the Java virtual machine.
+
+If you are writing in Python, this tool should be the executable Python script itself (file name should be `eecs485pa5p` instead of `eecs485pa5p.py`, make sure your script is executable: having python interpreter `#!/usr/bin/python` in first line and run `chmod +x eecs485pa5p`)
 
 The command-line tool should take the following set of arguments:
 
@@ -143,7 +145,7 @@ your code may need more attention.
 
 ### The Code
 
-As with PageRank, you should implement this project only in a traditional language: C, C++, or Java.
+As with PageRank, you could implement this project in: C, C++, Java, or Python.
 
 The inverted index data is in the format like:
 
@@ -200,11 +202,14 @@ followed by hub and authority values you have computed for that page (delimited 
     2,0.005,0.001
     ....
 
+If you are writing in C, C++, or Java:
 Your source code should be compiled by invoking make in the pa5/hits directory 
 (you can use Makefile to make this job easier). After the compile is finished, your program 
 should be invoked by a command-line tool called eecs485pa5h. If you are writing in C or C++, 
 this tool can simply be your binary. If you are writing in Java, this tool should be 
-a bash script that invokes the Java virtual machine.
+a bash script that invokes the Java virtual machine. 
+
+If you are writing in Python, this tool should be the executable Python scrip itself (file name should be `eecs485pa5h` instead of `eecs485pa5h.py`, make sure your script is executable: having python interpreter `#!/usr/bin/python` in first line and run `chmod +x eecs485pa5h`)
 
 The command-line tool should take the following set of arguments:
 
@@ -226,10 +231,12 @@ It will use a different h value, will use a percent-change convergence criterion
 
 We will check your pa5_SecretString/pagerank and pa5_SecretString/hits directory for your command-line tool. 
 We will run it on graphs that may be different from the Wikipedia test graphs, 
-and with different parameter settings. Make sure to keep the code compileable and executable 
-without any problems. We may deduct some amount from your grade if you do not follow the above format guidelines.
+and with different parameter settings. Make sure to keep the code compileable(C/C++, Java) and executable 
+without any problems. We will deduct some amount from your grade if you do not follow the above format guidelines.
 
-You cannot claim your score if we cannot even compile the code by typing make.
+When using C/C++, or Java: You cannot claim your score if we cannot even compile the code by typing make.
+When using Python: You cannot claim your score if we cannot execute the script by running `./eecs485pa5h <h value> (-k <numiterations> | -converge <maxchange>) “queries” <input-net-file> <input-inverted-index-file> <output-file>` or `./eecs485pa5p <dvalue> (-k <numiterations> | -converge <maxchange>) inputnetfile outputfile`.
+
 
 There is no extra credit available for this assignment.
 

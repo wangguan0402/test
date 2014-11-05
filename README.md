@@ -136,7 +136,7 @@ your code may need more attention.
 ###  Graph
 
   The graph data provided for HITS is in the same 
-  format as in PageRank (You can find the link at the end of this manual). 
+  format as in PageRank. 
   We again use the 'Pajek NET' format to represent the graph. 
   However, since HITS constructs a seed set from the input query, 
   we additionally need text data to help choose the nodes. We pre-processed the wiki text data and 

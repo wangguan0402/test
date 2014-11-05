@@ -235,6 +235,7 @@ and with different parameter settings. Make sure to keep the code compileable(C/
 without any problems. We will deduct some amount from your grade if you do not follow the above format guidelines.
 
 When using C/C++, or Java: You cannot claim your score if we cannot even compile the code by typing make.
+
 When using Python: You cannot claim your score if we cannot execute the script by running `./eecs485pa5h <h value> (-k <numiterations> | -converge <maxchange>) “queries” <input-net-file> <input-inverted-index-file> <output-file>` or `./eecs485pa5p <dvalue> (-k <numiterations> | -converge <maxchange>) inputnetfile outputfile`.
 
 

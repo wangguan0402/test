@@ -188,7 +188,7 @@ no more than `X`. The values X and K should be command-line arguments of your to
 
 * The running time of computing hub and authority scores should be about 10 minutes. If your program is taking much longer than this, you likely need to optimize your code.
 
-* Please check [Here](https://github.com/wangguan0402/test2/blob/master/README.md) for more details.
+* Please check [Here](https://github.com/EECS485-Fall2014/admin/blob/master/pa5/hits_supplement.md) for more details.
 
 ### Result Output
 
@@ -245,4 +245,3 @@ There is no extra credit available for this assignment.
 
 * [Medium wiki graph (3M uncompressed)](http://www-personal.umich.edu/~wangguan/eecs485/hits.net)
 * [Inverted Index for the graph (15M compressed) ](http://www-personal.umich.edu/~wangguan/eecs485/hits_invindex.tar.gz)
-

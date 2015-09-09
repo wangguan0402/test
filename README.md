@@ -1,5 +1,5 @@
 # Assignment 1: Hello, World Wide Web
-### Due: Sat. September 20, 2014
+### Due: Sat. September ??, 2015
 This assignment introduces you to the software and tools which provide the backend for the website 
 you will be building in this course.
 
@@ -15,11 +15,11 @@ you will be building in this course.
 * [Deliverables](#deliverables)
 * [Final Words](#final-words)
 
-Changes to this spec will be announced on CTools and visible on [GitHub](https://github.com/EECS485-Fall2014/admin/blob/master/pa1/pa1.md).
+Changes to this spec will be announced on CTools and visible on [GitHub](https://github.com/EECS485-Fall2015/admin/blob/master/pa1/pa1.md).
 
 ## Part 1 (0 Points): Log in to Your Dev. Machine
 This is a group assignment. You should already have registered your GitHub username and joined a group via this 
-[link](http://eecs485group.herokuapp.com). You will also receive an email with the 
+[link](http://eecs485fall15.herokuapp.com/). You will also receive an email with the 
 following information:
 
 * Two port numbers (e.g. `12345` and `54321`)
@@ -43,7 +43,7 @@ your group name). To change your MySQL password, follow these steps:
         SET PASSWORD = PASSWORD('YOUR NEW PASSWORD');
 
 If you are unable to log in to your development machine or you cannot connect to MySQL 
-server, please let ethanjyx@umich.edu know right away.
+server, please let wangguan@umich.edu know right away.
 
 ## Part 2 (10 Points): Get a Server Running
 For programming assignment 1, we will be checking your two websites at the following URLs:
@@ -68,11 +68,9 @@ In this task you will start construction of your website. You will develop an on
 service. Your website should have registered users (people), each identified by a unique 
 username. For each person you should also maintain a password, a first name, a last name, 
 and an email address. Each person may create/update/destroy as many albums that he or she 
-owns as he or she would like. Each album has a unique id, a title, a date created, a date last 
-updated, and an owner's username. Each album may have zero or more photos. Within the context of a particular 
-album, a photo has a sequence number and a caption. For each photo, you will need to generate a hash as a unique picid. Each photo will also have a unique url. The same photo can be in two separate albums BUT there will be essentially two copies of this photo on the server. When users upload a photo, we upload it regardless of whether this photo is identical to a previously uploaded photo, and then we will keep both on the server. Although these photos look the same, actually their upload time is different so in some sense we see them as different photos, and thus these two photos will have different picids and urls. 
+owns as he or she would like. Each album has a unique id, a title (two albums could have same title), a date created, a date last updated, and an owner's username. Each album may have zero or more photos. Within the context of a particular album, a photo has a sequence number and a caption (caption only lies in database for now, we will display it on website in pa2). For each photo, you will need to generate a hash as a unique picid. Each photo will also have a unique url. The same photo can be in two separate albums BUT there will be essentially two copies of this photo on the server. When users upload a photo, we upload it regardless of whether this photo is identical to a previously uploaded photo, and then we will keep both on the server. Although these photos look the same, actually their upload time is different so in some sense we see them as different photos, and thus these two photos will have different picids and urls. 
 
-An initial relational schema for the data you will need is as follows (primary key is bolded):
+An relational schema for the data you will need is as follows (primary key is bolded):
 
 * User ( **username**, firstname, lastname, password, email )
 * Album ( **albumid**, title, created, lastupdated, username )
@@ -100,8 +98,8 @@ different sequence numbers.
 Put the SQL statements you used to create tables in the file `/sql/tbl_create.sql` in your group git repo for this project. Refer to Deliverables section for more detail about how to submit.
 
 ### Part 3b (10 points): Loading Data Into Tables
-Use the following information when loading your tables. Please make up any information which 
-is not given to you but *do not leave fields blank*. [Download the images](https://github.com/EECS485-Fall2014/admin/blob/master/pa1/pa1_images.zip) to load here. There should be 30 jpg files 
+Use the following information when loading your tables. Feel free to make up any information which 
+is not given to you (you can leave those blank if you like to). [Download the images](https://github.com/EECS485-Fall2015/admin/blob/master/pa1/pa1_images.zip) to load here. There should be 30 jpg files 
 prefixed by football, sports, space, or world.
 
 The website currently has three users.
@@ -120,8 +118,7 @@ bspace@spacejunkies.net. He used the site to create one album titled "Cool Space
 Shots". His images are prefixed by `space`.
 
 Put the SQL statements you used to load data in the file `/sql/load_data.sql` in your group git repo for this project. Refer to Deliverables section for more detail about how to submit. Although you can load 
-data directly from a text file, use insert statements instead. We need this to make this assignment 
-autogradable.
+data directly from a text file, use insert statements instead.
 
 #### MySQL Database
 For this assignment each group will use its own database. Each group will have all privileges on its databases 
@@ -150,9 +147,6 @@ input. For part 3a, the grading script will evaluate by seeing if all necessary 
 data can be inserted without errors, and test data are rejected if constraints are not satisfied. 
 For part 3b, the script will see if the data are populated by querying them.
 
-We will run your .sql files with our own database. Therefore, no update will be made in your 
-databases when we grade your part 3b.
-
 ## Part 4 (60 Points): Building a Photo Album
 In this part we will start working on our database-backed website. You will learn how to use 
 a back-end web programming language to interact with MySQL database to generate dynamic webpages. By the end of this 
@@ -170,7 +164,7 @@ An "index page" at `http://{group_url}/` will serve as the homepage for the webs
 design is to create a template file (or set of files) that you include in all the pages your server serves up to the 
 users - this is possible in nearly every server-side framework.
 
-#### Index: `/`
+#### Index: `/` = `http://{host}:{port}/{secret}/pa1/`
 The index should contain a proper &lt;title> tag, other &lt;meta> tags, a header and footer for 
 the page, some text describing the website and a list of users whose albums can be browsed. In 
 PA1, no login is needed for your website.
@@ -263,7 +257,7 @@ page should enable the user to perform the following operations:
     - You should automatically assign a sequence number to a picture, which is one larger than the largest sequence number in *the picture's album* currently.
 * Delete pictures from the album.
     - Be sure to remove the file in the `/pictures` folder as well as the database.
-* You need to manage the `lastupdated` date in the `album` table.
+* You need to manage the `lastupdated` date in the `album` using triggers, e.g. upload a new photo in an album, the `lastupdated` time in this album should change automatically.
 
 Similar to above you may `add` or `delete` pictures via HTTP `POST /album/edit` from an HTML from. To Add:
 
@@ -303,7 +297,7 @@ Make sure that all these functions are present in your web application:
 * `/albums/edit`  Editing the List of Albums - Delete/Add Albums
 * `/pic`          View Picture with Prev/Next Links
 
-Also be sure to turn in your `.sql` files in the `/sql` directory as mentioned above.
+Also be sure to turn in your `.sql` files in the `/sql` directory as mentioned above. (EECS485-Fall2015/pa1_xxxxxxxx/sql on Github)
 
 #### Deployment
 

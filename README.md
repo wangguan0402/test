@@ -1,5 +1,5 @@
 # Assignment 1: Hello, World Wide Web
-### Due: Sat. September ??, 2015
+### Due: Sat. September 22, 2015
 This assignment introduces you to the software and tools which provide the backend for the website 
 you will be building in this course.
 
@@ -58,8 +58,7 @@ For programming assignment 1, we will be checking your two websites at the follo
 
 *Note: We accept multiple server-side languages and therefor setting up a webserver may differ across these implementations. 
 
-We will provide specific tutorials for the following shortly, but feel free to get started right away:  
-- Apache and PHP 
+We will provide specific tutorial for the following shortly, but feel free to get started right away:  
 - Python
 - We do not provide *official* support for other languages/frameworks. *You may decide to complete this and other projects with another language/framework only if you feel comfortable without staff support.*
 
@@ -266,8 +265,9 @@ Similar to above you may `add` or `delete` pictures via HTTP `POST /album/edit` 
     <multipart/form-data also part of post> 
 
 Be sure to read a tutorial on how to accept `multipart/form-data` via a HTML form POST request.   
+- [Example in Flask-Python](http://flask.pocoo.org/docs/patterns/fileuploads/) 
 - [Example in PHP](http://php.net/manual/en/features.file-upload.post-method.php)  
-- [Example in Flask-Python](http://flask.pocoo.org/docs/patterns/fileuploads/)  
+
 
 To Delete a photo:
 
